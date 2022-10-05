@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Util\JWT;
 
 class AuthController extends Controller
 {
@@ -37,10 +38,14 @@ class AuthController extends Controller
         'password' => Hash::make($request->password)
       ]);
 
+      $payload = ['email' => $user->email];
+
+      $jwt = JWT::encode($payload);
+
       return response()->json([
         'status' => true,
         'message' => 'User Created Successfully',
-        'token' => $user->createToken("API TOKEN")->plainTextToken
+        'token' => $jwt
       ], 200);
     } catch (\Throwable $th) {
       return response()->json([
@@ -78,11 +83,16 @@ class AuthController extends Controller
 
       $user = User::where('email', $request->email)->first();
 
+      $payload = ['email' => $user->email];
+
+      $jwt = JWT::encode($payload);
+
       return response()->json([
         'status' => true,
         'message' => 'User Logged In Successfully',
-        'token' => $user->createToken("API TOKEN")->plainTextToken
+        'token' => $jwt
       ], 200);
+
     } catch (\Throwable $th) {
       return response()->json([
         'status' => false,
