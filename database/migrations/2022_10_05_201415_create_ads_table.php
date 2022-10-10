@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('ads', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->uuid('id')->primary();
             $table->string('title');
             $table->longText('description');
             $table->float('price');
