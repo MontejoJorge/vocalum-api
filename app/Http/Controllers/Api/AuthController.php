@@ -19,7 +19,7 @@ class AuthController extends Controller
 
       if ($validation->fails()) {
         return response()->json([
-          'errors' => $validation->errors()
+          'message' => $validation->errors()->first()
         ], 400);
       }
 
@@ -51,13 +51,7 @@ class AuthController extends Controller
     try {
       $validation = AuthValidator::login($request->all());
 
-      if ($validation->fails()) {
-        return response()->json([
-          'errors' => $validation->errors()
-        ], 400);
-      }
-
-      if (!Auth::attempt($request->only(['email', 'password']))) {
+      if (!Auth::attempt($request->only(['email', 'password'])) || $validation->fails()) {
         return response()->json([
           'message' => 'Email & Password does not match with our record.',
         ], 401);

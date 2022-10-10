@@ -14,13 +14,26 @@ class Auth
 
     try {
 
-      $payload = JWT::decode($request->token);
+      $token = strval($request->header('x-auth-token'));
+      $request->token = $token;
+
+      if (!$token) {
+        return response()->json([
+          'message' => 'Token is required.'
+        ], 401);
+      }
+
+      $payload = JWT::decode($token);
       return $next($request);
 
     } catch (SignatureInvalidException) {
-      return response(null, 401);
+      return response()->json([
+        'message' => 'Invalid token.'
+      ], 401);
     } catch (ExpiredException) {
-      return response(null, 401);
+      return response()->json([
+        'message' => 'Expired token.'
+      ], 401);
     }
     
   }
