@@ -17,6 +17,7 @@ return new class extends Migration
             $table->uuid('id');
             $table->string('title');
             $table->longText('description');
+            $table->float('price');
             $table->uuid('photo');
             $table->foreignUuid('user_id')->constrained('users');
             $table->timestamps();

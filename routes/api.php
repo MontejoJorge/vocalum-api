@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 
 use  App\Http\Controllers\Api\AuthController;
 use  App\Http\Controllers\UserController;
+use  App\Http\Controllers\AdController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -25,3 +27,6 @@ Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'loginUser']);
 
 Route::get('/user', [UserController::class, 'getUser'])->middleware('auth');
+
+Route::post('/ads', [AdController::class, 'store'])->middleware('auth');
+Route::get('/ads', [AdController::class, 'view']);

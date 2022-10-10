@@ -24,6 +24,7 @@ class Auth
       }
 
       $payload = JWT::decode($token);
+      $request->payload = $payload;
       return $next($request);
 
     } catch (SignatureInvalidException) {
