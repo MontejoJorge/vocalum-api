@@ -62,6 +62,11 @@ class AdController extends Controller
       $ads->where('price', '<=', intval($request->maxPrice));
     }
 
+    if ($request->tags) {
+      $ads->whereHas('tags', function($query) use ($request) {
+        $query->whereIn('name', $request->tags);
+      });
+    }
     $ads = $ads->get();
 
     return response()->json([
