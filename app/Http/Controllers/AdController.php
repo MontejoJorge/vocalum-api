@@ -32,8 +32,27 @@ class AdController extends Controller
 
   public function view(Request $request) {
 
-    $ads = Ad::get();
+    $ads = Ad::query();
 
-    return response()->json($ads, 200);
+    if ($request->search) {
+      $ads->orWhere(function($query) use ($request) {
+        $query->where('title', 'like', '%' . $request->search . '%')
+          ->orWhere('description', 'like', '%' . $request->search . '%');
+      });
+    }
+
+    if ($request->minPrice) {
+      $ads->where('price', '>=', intval($request->minPrice));
+    }
+
+    if ($request->maxPrice) {
+      $ads->where('price', '<=', intval($request->maxPrice));
+    }
+
+    $ads = $ads->get();
+
+    return response()->json([
+      'count' => count($ads),
+      'ads' => $ads], 200);
   }
 }
