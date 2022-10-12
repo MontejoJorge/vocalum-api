@@ -7,6 +7,7 @@ use Ramsey\Uuid\Uuid;
 use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\Ad;
+use \App\Models\Tag;
 
 class AdController extends Controller
 {
@@ -26,6 +27,18 @@ class AdController extends Controller
       'user_id' => $user->id,
       'photo' => $imgUUID
     ]);
+
+    foreach ($request->tags as $tag) {
+
+      $tag = strtolower($tag);
+      $tag = str_replace(' ', '-', $tag);
+
+      $tag = Tag::firstOrCreate(['name' => $tag]);
+      
+      $ad->tags()->attach($tag->id, ["id" => Uuid::uuid4()]);
+    }
+
+    $ad->tags = $ad->tags;
 
     return response()->json($ad, 200);
   }
