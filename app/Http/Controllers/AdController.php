@@ -67,6 +67,11 @@ class AdController extends Controller
         $query->whereIn('name', $request->tags);
       });
     }
+
+    if (in_array($request->orderByPrice, ['asc', 'desc'])) {
+      $ads->orderBy('price', $request->orderByPrice);
+    }
+
     $ads = $ads->get();
 
     return response()->json([
