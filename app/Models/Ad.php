@@ -17,6 +17,11 @@ class Ad extends Model
       'updated_at'
     ];
 
+    protected $hidden = [
+      'id',
+      'user_id'
+    ];
+
     public function user() {
       return $this->belongsTo(User::class);
     }

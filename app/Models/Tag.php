@@ -16,6 +16,10 @@ class Tag extends Model
       'updated_at'
     ];
 
+    protected $visible = [
+      'name'
+    ];
+
     public function ads() {
       return $this->belongsToMany(Ad::class);
     }
