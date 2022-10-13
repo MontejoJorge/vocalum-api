@@ -20,12 +20,15 @@ class AdController extends Controller
 
     Storage::putFileAs('public', $img, $imgUUID . '.jpg');
 
+    $url = strtolower(str_replace(' ', '-', $request->title)) . '-' . explode('-', Uuid::uuid4())[4];
+
     $ad = Ad::create([
       'title' => $request->title,
       'description' => $request->description,
       'price' => $request->price,
       'user_id' => $user->id,
-      'photo' => $imgUUID
+      'photo' => $imgUUID,
+      'url' => $url
     ]);
 
     foreach ($request->tags as $tag) {

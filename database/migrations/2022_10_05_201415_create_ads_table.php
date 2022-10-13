@@ -20,6 +20,7 @@ return new class extends Migration
             $table->float('price');
             $table->uuid('photo');
             $table->foreignUuid('user_id')->constrained('users');
+            $table->string('url')->unique();
             $table->timestamps();
         });
     }
