@@ -81,4 +81,19 @@ class AdController extends Controller
       'count' => count($ads),
       'ads' => $ads], 200);
   }
+
+  public function viewOne(Request $request) {
+
+    $ad = Ad::where('url', $request->url)->first();
+
+    if (!$ad) {
+      return response()->json(['error' => 'Ad not found'], 404);
+    }
+
+    $ad->tags = $ad->tags;
+    
+    $ad->user = $ad->user;
+
+    return response()->json($ad, 200);
+  }
 }
