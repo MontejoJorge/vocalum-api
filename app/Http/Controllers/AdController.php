@@ -75,6 +75,8 @@ class AdController extends Controller
       $ads->orderBy('price', $request->orderByPrice);
     }
 
+    $ads = $ads->with('tags');
+
     $ads = $ads->get();
 
     return response()->json([
