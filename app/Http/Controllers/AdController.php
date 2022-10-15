@@ -18,7 +18,7 @@ class AdController extends Controller
     $imgUUID = Uuid::uuid4();
     $img = $request->file('photo');
 
-    Storage::disk('dropbox')->put('/', $img, $imgUUID . '.jpg');
+    Storage::disk('dropbox')->put('/', $img);
 
     $url = strtolower(str_replace(' ', '-', $request->title)) . '-' . explode('-', Uuid::uuid4())[4];
 
