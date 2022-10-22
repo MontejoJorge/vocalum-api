@@ -15,11 +15,10 @@ class AdController extends Controller
 
     $user = User::where('email', $request->payload->email)->first();
 
-    $imgUUID = Uuid::uuid4();
     $img = $request->file('photo');
+    $imgName = Uuid::uuid4() . '.'.$img->getClientOriginalExtension();
 
-    Storage::putFileAs('public', $img, $imgUUID . '.jpg');
-    //Storage::disk('storage')->putFileAs('/', $img, $imgUUID.'.'.$img->getClientOriginalExtension());
+    Storage::disk('s3')->putFileAs('/', $img, $imgName);
 
     $url = strtolower(str_replace(' ', '-', $request->title)) . '-' . explode('-', Uuid::uuid4())[4];
 
@@ -28,7 +27,7 @@ class AdController extends Controller
       'description' => $request->description,
       'price' => $request->price,
       'user_id' => $user->id,
-      'photo' => $imgUUID,
+      'photo' => $imgName,
       'url' => $url
     ]);
 
@@ -127,22 +126,9 @@ class AdController extends Controller
     }
 
     $ad->delete();
+    Storage::disk('s3')->delete($ad->photo);
 
     return response()->json(['message' => 'Ad deleted'], 200);
   }
 
-  public function getPhoto(Request $request) {
-
-    $ad = Ad::where('photo', $request->photo)->first();
-
-    if (!$ad) {
-      return response()->json(['error' => 'Ad not found'], 404);
-    }
-
-    $fileSystem = Storage::disk('sftp');
-
-    $file = $fileSystem->get($ad->photo . '.jpg');
-
-    return response($file, 200)->header('Content-Type', 'image/jpeg');
-  }
 }
