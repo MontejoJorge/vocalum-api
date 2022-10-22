@@ -10,14 +10,16 @@ use App\Util\JWT;
 
 class Auth
 {
-  public function handle(Request $request, Closure $next) {
+  public function handle(Request $request, Closure $next, $needed = true) {
+
+    $needed = filter_var($needed, FILTER_VALIDATE_BOOLEAN);
 
     try {
 
       $token = strval($request->header('x-auth-token'));
       $request->token = $token;
 
-      if (!$token) {
+      if (!$token && $needed) {
         return response()->json([
           'message' => 'Token is required.'
         ], 401);
@@ -27,14 +29,15 @@ class Auth
       $request->payload = $payload;
       return $next($request);
 
-    } catch (SignatureInvalidException) {
-      return response()->json([
-        'message' => 'Invalid token.'
-      ], 401);
-    } catch (ExpiredException) {
-      return response()->json([
-        'message' => 'Expired token.'
-      ], 401);
+    } catch (\Exception) {
+      $request->token = null;
+      if ($needed) {
+        return response()->json([
+          'message' => 'Invalid token.'
+        ], 401);
+      } else {
+        return $next($request);
+      }
     }
     
   }

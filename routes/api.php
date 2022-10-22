@@ -29,6 +29,6 @@ Route::post('/auth/login', [AuthController::class, 'loginUser']);
 Route::get('/user', [UserController::class, 'getUser'])->middleware('auth');
 
 Route::post('/ads', [AdController::class, 'store'])->middleware('auth');
-Route::get('/ads', [AdController::class, 'view']);
+Route::get('/ads', [AdController::class, 'view'])->middleware('auth:false');
 
 Route::get('/ads/{url}', [AdController::class, 'viewOne']);
