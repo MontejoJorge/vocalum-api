@@ -112,4 +112,21 @@ class AdController extends Controller
 
     return response()->json($ad, 200);
   }
+
+  public function delete(Request $request) {
+
+    $ad = Ad::where('url', $request->url)->first();
+
+    if (!$ad) {
+      return response()->json(['error' => 'Ad not found'], 404);
+    }
+
+    if ($ad->user->email !== $request->payload->email) {
+      return response()->json(['error' => 'You are not allowed to delete this ad'], 403);
+    }
+
+    $ad->delete();
+
+    return response()->json(['message' => 'Ad deleted'], 200);
+  }
 }

@@ -32,3 +32,5 @@ Route::post('/ads', [AdController::class, 'store'])->middleware('auth');
 Route::get('/ads', [AdController::class, 'view'])->middleware('auth:false');
 
 Route::get('/ads/{url}', [AdController::class, 'viewOne']);
+
+Route::delete('/ads/{url}', [AdController::class, 'delete'])->middleware('auth');
