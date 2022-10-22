@@ -130,4 +130,19 @@ class AdController extends Controller
 
     return response()->json(['message' => 'Ad deleted'], 200);
   }
+
+  public function getPhoto(Request $request) {
+
+    $ad = Ad::where('photo', $request->photo)->first();
+
+    if (!$ad) {
+      return response()->json(['error' => 'Ad not found'], 404);
+    }
+
+    $fileSystem = Storage::disk('sftp');
+
+    $file = $fileSystem->get($ad->photo . '.jpg');
+
+    return response($file, 200)->header('Content-Type', 'image/jpeg');
+  }
 }
