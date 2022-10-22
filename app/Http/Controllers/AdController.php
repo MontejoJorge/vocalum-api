@@ -18,8 +18,8 @@ class AdController extends Controller
     $imgUUID = Uuid::uuid4();
     $img = $request->file('photo');
 
-    $fileSystem = Storage::disk('sftp');
-    $fileSystem->putFileAs('/', $img, $imgUUID.'.'.$img->getClientOriginalExtension());
+    Storage::putFileAs('public', $img, $imgUUID . '.jpg');
+    //Storage::disk('storage')->putFileAs('/', $img, $imgUUID.'.'.$img->getClientOriginalExtension());
 
     $url = strtolower(str_replace(' ', '-', $request->title)) . '-' . explode('-', Uuid::uuid4())[4];
 
