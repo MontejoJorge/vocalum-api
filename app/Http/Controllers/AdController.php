@@ -57,6 +57,17 @@ class AdController extends Controller
       });
     }
 
+    //if the request payload is not null and have an email then we will return the ads that not belong to that user
+    // if ($request->payload && $request->payload->email) {
+    //   $user = User::where('email', $request->payload->email)->first();
+    //   $ads->where('user_id', '!=', $user->id);
+    // }
+
+    if ($request->user_email) {
+      $user = User::where('email', $request->user_email)->first();
+      $ads->where('user_id', '=', $user->id);
+    }
+
     if ($request->minPrice) {
       $ads->where('price', '>=', intval($request->minPrice));
     }
@@ -76,6 +87,9 @@ class AdController extends Controller
     }
 
     $ads = $ads->with('tags');
+
+    //return the user of each ad
+    $ads = $ads->with('user');
 
     $ads = $ads->get();
 
