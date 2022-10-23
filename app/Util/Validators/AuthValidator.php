@@ -12,7 +12,8 @@ class AuthValidator {
       'surname' => 'required|max:255',
       'phone' => 'required|size:9|regex:/^[679]{1}[0-9]{8}$/',
       'email' => 'required|email|unique:users,email',
-      'password' => 'required'
+      'password' => 'required|confirmed',
+      'password_confirmation' => 'required'
     ]);
   }
 
