@@ -8,10 +8,19 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\Ad;
 use \App\Models\Tag;
+use App\Util\Validators\AdValidator;
 
 class AdController extends Controller
 {
   public function store(Request $request) {
+
+    $validation = AdValidator::store($request->all());
+
+    if ($validation->fails()) {
+      return response()->json([
+        'errors' => $validation->errors()
+      ], 400);
+    }
 
     $user = User::where('email', $request->payload->email)->first();
 
@@ -47,6 +56,14 @@ class AdController extends Controller
   }
 
   public function view(Request $request) {
+
+    $validation = AdValidator::view($request->all());
+
+    if ($validation->fails()) {
+      return response()->json([
+        'errors' => $validation->errors()
+      ], 400);
+    }
 
     $ads = Ad::query();
 
