@@ -56,6 +56,18 @@ return [
             'throw' => false,
         ],
 
+        'sftp' => [
+          'driver' => 'sftp',
+          'host' => env('SFTP_HOST'),
+          'username' => env('SFTP_USERNAME'),
+          'password' => env('SFTP_PASSWORD'),
+        ],
+
+        'dropbox' => [
+          'driver' => 'dropbox',
+          'authorization_token' => env('DROPBOX_TOKEN')
+        ],
+
     ],
 
     /*
