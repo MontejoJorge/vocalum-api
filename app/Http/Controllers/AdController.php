@@ -105,14 +105,11 @@ class AdController extends Controller
 
     $ads = $ads->with('tags');
 
-    //return the user of each ad
     $ads = $ads->with('user');
 
-    $ads = $ads->get();
+    $res = $ads->paginate(25);
 
-    return response()->json([
-      'count' => count($ads),
-      'ads' => $ads], 200);
+    return response()->json($res, 200);
   }
 
   public function viewOne(Request $request) {
