@@ -29,7 +29,7 @@ class AdController extends Controller
 
     Storage::disk('s3')->putFileAs('/', $img, $imgName);
 
-    $url = strtolower(str_replace(' ', '-', $request->title)) . '-' . explode('-', Uuid::uuid4())[4];
+    $url = strtolower(preg_replace('/[^A-Za-z0-9-]+/', '-', trim($request->title, '-'))) . '-' . explode('-', Uuid::uuid4())[4];
 
     $ad = Ad::create([
       'title' => $request->title,
