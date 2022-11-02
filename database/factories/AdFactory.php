@@ -35,7 +35,7 @@ class AdFactory extends Factory
               'b7daa210-18e1-48cf-9738-8f578b6e67c1.jpg',
               'f2fdc4e7-56a8-4832-973c-dafc79fe6922.jpg',
             ]),
-            'url' => strtolower(str_replace(' ', '-', fake()->sentence(3))) . '-' . explode('-', Uuid::uuid4())[4],
+            'url' => strtolower(preg_replace('/[^A-Za-z0-9-]+/', '-', trim(fake()->sentence(3), '-'))) . '-' . explode('-', Uuid::uuid4())[4],
 
         ];
     }
