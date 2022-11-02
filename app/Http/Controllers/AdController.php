@@ -29,7 +29,7 @@ class AdController extends Controller
 
     Storage::disk('s3')->putFileAs('/', $img, $imgName);
 
-    $url = strtolower(str_replace(' ', '-', $request->title)) . '-' . explode('-', Uuid::uuid4())[4];
+    $url = strtolower(preg_replace('/[^A-Za-z0-9-]+/', '-', trim($request->title, '-'))) . '-' . explode('-', Uuid::uuid4())[4];
 
     $ad = Ad::create([
       'title' => $request->title,
@@ -105,14 +105,11 @@ class AdController extends Controller
 
     $ads = $ads->with('tags');
 
-    //return the user of each ad
     $ads = $ads->with('user');
 
-    $ads = $ads->get();
+    $res = $ads->paginate(25);
 
-    return response()->json([
-      'count' => count($ads),
-      'ads' => $ads], 200);
+    return response()->json($res, 200);
   }
 
   public function viewOne(Request $request) {

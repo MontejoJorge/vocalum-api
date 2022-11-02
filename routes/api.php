@@ -28,9 +28,9 @@ Route::post('/auth/login', [AuthController::class, 'loginUser']);
 
 Route::get('/user', [UserController::class, 'getUser'])->middleware('auth');
 
-Route::post('/ads', [AdController::class, 'store'])->middleware('auth');
-Route::get('/ads', [AdController::class, 'view'])->middleware('auth:false');
+Route::post('/items', [AdController::class, 'store'])->middleware('auth');
+Route::get('/items', [AdController::class, 'view'])->middleware('auth:false');
 
-Route::get('/ads/{url}', [AdController::class, 'viewOne']);
+Route::get('/items/{url}', [AdController::class, 'viewOne']);
 
-Route::delete('/ads/{url}', [AdController::class, 'delete'])->middleware('auth');
+Route::delete('/items/{url}', [AdController::class, 'delete'])->middleware('auth');
