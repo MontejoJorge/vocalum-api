@@ -25,7 +25,7 @@ class AdValidator {
       'minPrice' => 'lte:maxPrice',
       'maxPrice' => 'gte:minPrice',
       'tags' => 'image|mimes:jpg,png,jpeg|max:4096',
-      'orderByPrice' => 'array',
+      'orderByPrice' => 'in:asc,desc,no',
     ],[
       'minPrice.lte' => 'The minimum price must be less than the maximum price.',
       'maxPrice.gte' => 'The maximum price must be greater than the minimum price.',
