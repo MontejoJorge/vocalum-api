@@ -17,12 +17,12 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('name');
             $table->string('surname');
-            $table->integer('phone');
+            $table->integer('phone')->unique()->nullable();
             $table->string('email')->unique();
             $table->boolean('google');
             $table->boolean('active');
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->timestamps();
         });
     }
