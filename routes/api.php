@@ -28,6 +28,7 @@ Route::post('/auth/login', [AuthController::class, 'loginUser']);
 Route::post('/auth/google', [AuthController::class, 'googleAuth']);
 
 Route::get('/user', [UserController::class, 'getUser'])->middleware('auth');
+Route::post('/user', [UserController::class, 'updateUser'])->middleware('auth');
 
 Route::post('/items', [AdController::class, 'store'])->middleware('auth');
 Route::get('/items', [AdController::class, 'view'])->middleware('auth:false');
