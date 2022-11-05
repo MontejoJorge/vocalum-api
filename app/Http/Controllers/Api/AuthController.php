@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Util\JWT;
 use App\Util\Validators\AuthValidator;
+use Google\AccessToken;
 
 class AuthController extends Controller
 {
@@ -76,5 +77,43 @@ class AuthController extends Controller
         'message' => $th->getMessage()
       ], 500);
     }
+  }
+
+  public function googleAuth(Request $request)
+  {
+    if ($request->google_token) {
+      $verify = new AccessToken\Verify();
+      $payload = $verify->verifyIdToken($request->google_token);
+
+      $user = User::where('email', $payload['email'])->first();
+
+      if ($user) {
+        $jwt = JWT::encode(['email' => $user->email]);
+
+        return response()->json([
+          'token' => $jwt
+        ], 200);
+      } else {
+        $user = User::create([
+          'name' => ucfirst(strtolower($payload['given_name'])),
+          'surname' => ucfirst(strtolower($payload['family_name'])),
+          'email' => $payload['email'],
+          'google' => True,
+          'active' => True,
+        ]);
+
+        $jwt = JWT::encode(['email' => $user->email]);
+
+        return response()->json([
+          'token' => $jwt
+        ], 200);
+      }
+
+    } else {
+      return response()->json([
+        'message' => 'Token is empty'
+      ], 400);
+    }
+
   }
 }
